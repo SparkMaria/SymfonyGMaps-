@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Marker;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query;
 
 class ProjectController extends Controller {
 
@@ -22,10 +20,10 @@ class ProjectController extends Controller {
             
             $em = $this->getDoctrine()->getManager();
             $locations = $em->getRepository('AppBundle:Marker')->findAll();
-            dump($locations);
-            $locations = $this->get('serializer')->serialize($locations, 'json');
+
+            $serializedLocations = $this->get('serializer')->serialize($locations, 'json');
             
-            return $this->render('Route/map.html.twig', ['locations' => $locations]);
+            return $this->render('Route/map.html.twig', ['locations' => $serializedLocations]);
         }
         if ($request->isMethod('POST')) {
             $name_value = $request->request->get('name');
@@ -34,17 +32,12 @@ class ProjectController extends Controller {
 
             $em = $this->getDoctrine()->getManager();
 
-
-            $marker = new Marker();
-            $marker->setName($name_value);
-            $marker->setLat($lat_value);
-            $marker->setLng($lng_value);
-
+            $marker = new Marker($name_value, $lat_value, $lng_value);
+        
             $em->persist($marker);
             $em->flush();
 
-
-            return new Response('ok' . $marker->getName());
+            return new Response($marker->getName());
         }
     }
 

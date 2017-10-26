@@ -38,8 +38,10 @@ class Marker {
     
 
 
-    public function __construct() {
-
+    public function __construct($name, $lat, $lng) {
+        $this->name = $name;
+        $this->lat = $lat;
+        $this->lng = $lng;
     }
 
     function getId() {
