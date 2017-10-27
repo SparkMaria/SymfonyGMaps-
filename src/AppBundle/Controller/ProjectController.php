@@ -41,26 +41,6 @@ class ProjectController extends Controller {
         }
     }
 
-    /**
-     * @Route("/getLocations", name = "getLocations")
-     */
-    public function showMarkersAction(Request $request) {
 
-
-        if ($request->isMethod('POST')) {
-
-            $em = $this->getDoctrine()->getManager();
-            $locations = $em->getRepository('AppBundle:Marker')->findAll();
-            
-            $locations = $this->get('serializer')->serialize($locations, 'json');
-
-
-
-            return new JsonResponse($locations);
-        }
-        if ($request->isMethod('GET')) {
-            return new Response();
-        }
-    }
 
 }
